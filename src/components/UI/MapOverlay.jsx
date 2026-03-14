@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useMemo } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Tooltip, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { useTimeline } from '../../context/TimelineContext'
+import { ANCIENT_PLACES, PLACE_TYPE_STYLES } from '../../data/ancientPlaces'
 
-const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
 const DARK_TILES_ATTR = '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
 const INITIAL_ZOOM = 12
 const MAX_ZOOM = 19
@@ -27,6 +28,47 @@ function MapController({ location }) {
   }, [location, map])
 
   return null
+}
+
+function AncientPlaceLabels() {
+  const { currentEra } = useTimeline()
+
+  const visiblePlaces = useMemo(() => {
+    return ANCIENT_PLACES.filter(p => p.eras.includes(currentEra))
+  }, [currentEra])
+
+  return visiblePlaces.map((place, i) => {
+    const style = PLACE_TYPE_STYLES[place.type] || PLACE_TYPE_STYLES.city
+    const isRegion = place.type === 'region'
+    const isWater = place.type === 'water'
+
+    const icon = L.divIcon({
+      className: 'ancient-place-icon',
+      html: isRegion || isWater
+        ? ''
+        : `<div class="ancient-place-dot" style="background:${style.color}"></div>`,
+      iconSize: [6, 6],
+      iconAnchor: [3, 3],
+    })
+
+    return (
+      <Marker
+        key={`${place.name}-${i}`}
+        position={[place.lat, place.lng]}
+        icon={icon}
+        interactive={false}
+      >
+        <Tooltip
+          permanent
+          direction="right"
+          offset={[8, 0]}
+          className={`ancient-label ancient-label--${place.type}`}
+        >
+          {place.name}
+        </Tooltip>
+      </Marker>
+    )
+  })
 }
 
 function EntityMarkers() {
@@ -111,6 +153,7 @@ export function MapOverlay() {
           maxZoom={MAX_ZOOM}
         />
         <MapController location={location} />
+        <AncientPlaceLabels />
         <EventMarker location={location} eventName={currentEvent.name} />
         <EntityMarkers />
       </MapContainer>

@@ -180,6 +180,71 @@
   color: #00f3ff !important;
 }
 
+/* Ancient place label styles */
+.ancient-place-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.ancient-place-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.ancient-label {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.ancient-label::before {
+  display: none !important;
+}
+
+.ancient-label--city .leaflet-tooltip-content {
+  color: #00f3ff;
+  font-size: 11px;
+  font-weight: 500;
+  text-shadow: 0 0 6px rgba(0, 243, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.ancient-label--sacred .leaflet-tooltip-content {
+  color: #ffb300;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(255, 179, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.ancient-label--landmark .leaflet-tooltip-content {
+  color: #88bbff;
+  font-size: 10px;
+  font-weight: 500;
+  font-style: italic;
+  text-shadow: 0 0 6px rgba(136, 187, 255, 0.4), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.ancient-label--water .leaflet-tooltip-content {
+  color: #4488cc;
+  font-size: 10px;
+  font-style: italic;
+  text-shadow: 0 0 6px rgba(68, 136, 204, 0.4), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.ancient-label--region .leaflet-tooltip-content {
+  color: #666688;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
 /* Event marker pulse on 2D map */
 .event-marker-icon {
   background: none !important;
