@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react'
 import { BIBLICAL_TIMELINE, ERAS, ERA_LABELS, ERA_COLORS } from '../data/timeline'
-import { ENTITY_PATHS } from '../data/entities'
+import { ENTITY_PATHS, ENTITY_TYPE_LABELS } from '../data/entities'
 
 const TimelineContext = createContext()
 
@@ -34,7 +34,19 @@ export function TimelineProvider({ children }) {
     })
   }, [currentYear])
 
-  // Format year for display
+  const groupedEntities = useMemo(() => {
+    const groups = {}
+    for (const entity of activeEntities) {
+      const type = entity.type || 'person'
+      if (!groups[type]) groups[type] = []
+      groups[type].push(entity)
+    }
+    const typeOrder = ['king', 'prophet', 'priest', 'judge', 'patriarch', 'apostle', 'ruler', 'person', 'artifact']
+    return typeOrder
+      .filter(t => groups[t])
+      .map(t => ({ type: t, label: ENTITY_TYPE_LABELS[t] || t, entities: groups[t] }))
+  }, [activeEntities])
+
   const formatYear = useCallback((year) => {
     if (year < 0) return `${Math.abs(year)} BC`
     return `${year} AD`
@@ -52,6 +64,7 @@ export function TimelineProvider({ children }) {
     ERA_LABELS,
     ERA_COLORS,
     activeEntities,
+    groupedEntities,
     selectedEntity,
     setSelectedEntity,
     isPlaying,

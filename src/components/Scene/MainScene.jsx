@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import { Earth } from './Earth'
 import { CovenantPulses } from './CovenantPulses'
 import { EntityTrails } from './EntityTrails'
 import { GridOverlay } from './GridOverlay'
+import { CameraController } from './CameraController'
 
 export function MainScene() {
+  const controlsRef = useRef()
+
   return (
     <div className="w-full h-full absolute inset-0">
       <Canvas
@@ -22,12 +25,10 @@ export function MainScene() {
         }}
       >
         <React.Suspense fallback={null}>
-          {/* Lighting */}
           <ambientLight intensity={0.15} color="#334466" />
           <directionalLight position={[5, 3, 5]} intensity={0.8} color="#99aacc" />
           <pointLight position={[-5, -3, -5]} intensity={0.3} color="#003344" />
           
-          {/* Starfield */}
           <Stars 
             radius={80} 
             depth={50} 
@@ -38,7 +39,6 @@ export function MainScene() {
             speed={0.3} 
           />
           
-          {/* Main globe group */}
           <group>
             <Earth />
             <GridOverlay />
@@ -46,8 +46,10 @@ export function MainScene() {
             <EntityTrails />
           </group>
           
-          {/* Camera controls */}
+          <CameraController controlsRef={controlsRef} />
+
           <OrbitControls 
+            ref={controlsRef}
             enablePan={false} 
             enableZoom={true} 
             minDistance={2.8} 

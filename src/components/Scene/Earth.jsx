@@ -1,5 +1,4 @@
-import React, { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import React from 'react'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -7,24 +6,11 @@ import mapImg from '../../assets/earth_map.jpg'
 import specImg from '../../assets/earth_specular.jpg'
 
 export function Earth() {
-  const meshRef = useRef()
-  const atmosphereRef = useRef()
-  
   const [map, specularMap] = useTexture([mapImg, specImg])
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.0003
-    }
-    if (atmosphereRef.current) {
-      atmosphereRef.current.rotation.y += 0.0003
-    }
-  })
 
   return (
     <group>
-      {/* Main Earth sphere */}
-      <mesh ref={meshRef}>
+      <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
           map={map}
@@ -37,8 +23,7 @@ export function Earth() {
         />
       </mesh>
       
-      {/* Atmosphere glow shell */}
-      <mesh ref={atmosphereRef} scale={[1.02, 1.02, 1.02]}>
+      <mesh scale={[1.02, 1.02, 1.02]}>
         <sphereGeometry args={[2, 64, 64]} />
         <meshBasicMaterial
           color="#00f3ff"
