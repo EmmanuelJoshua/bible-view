@@ -79,12 +79,10 @@ export function TacticalOverlay() {
         </div>
       )}
 
-      {/* Main UI Components (re-enable pointer events for interactive bits) */}
-      <div className="pointer-events-auto">
-        <PropheticHUD />
-        <EntityPanel />
-        <ChronosSlider />
-      </div>
+      {/* Main UI Components */}
+      <PropheticHUD />
+      <EntityPanel />
+      <ChronosSlider />
 
       {/* Bottom right - System clock */}
       <div className="absolute bottom-4 right-5 text-[9px] text-gray-600 font-mono tracking-widest">

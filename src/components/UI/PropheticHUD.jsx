@@ -11,7 +11,7 @@ export function PropheticHUD() {
       initial={{ opacity: 0, x: -30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="absolute left-5 top-28 w-72 bg-tactical-bg/85 border border-tactical-cyan/25 backdrop-blur-sm corner-decoration"
+      className="absolute left-5 top-28 w-72 bg-tactical-bg/85 border border-tactical-cyan/25 backdrop-blur-sm corner-decoration pointer-events-auto"
     >
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-tactical-cyan/20 bg-tactical-cyan/5">
