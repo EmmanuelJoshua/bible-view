@@ -52,7 +52,7 @@ export function MainScene() {
             ref={controlsRef}
             enablePan={false} 
             enableZoom={true} 
-            minDistance={2.8} 
+            minDistance={2.3} 
             maxDistance={8}
             enableDamping
             dampingFactor={0.05}

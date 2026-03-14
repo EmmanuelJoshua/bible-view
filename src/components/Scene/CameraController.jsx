@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { useTimeline } from '../../context/TimelineContext'
 import { latLongToVector3 } from '../../utils/coordinates'
 
-const CLOSE_DISTANCE = 3.4
+const CLOSE_DISTANCE = 2.55
 const WIDE_DISTANCE = 5.5
 const LERP_SPEED = 0.025
 const DEFAULT_POSITION = new THREE.Vector3(0, 1.5, WIDE_DISTANCE)
@@ -28,7 +28,9 @@ export function CameraController({ controlsRef }) {
       const direction = surfacePoint.clone().normalize()
 
       targetCamPos.current.copy(direction.clone().multiplyScalar(CLOSE_DISTANCE))
-      targetCamPos.current.y += 0.3
+      const right = new THREE.Vector3().crossVectors(direction, new THREE.Vector3(0, 1, 0)).normalize()
+      targetCamPos.current.addScaledVector(right, 0.15)
+      targetCamPos.current.y += 0.2
 
       targetLookAt.current.copy(surfacePoint)
     } else {
