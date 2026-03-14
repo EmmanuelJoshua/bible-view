@@ -8,6 +8,7 @@ export function TimelineProvider({ children }) {
   const [currentYear, setCurrentYear] = useState(-4000)
   const [selectedEntity, setSelectedEntity] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [mapVisible, setMapVisible] = useState(false)
   
   const currentEvent = useMemo(() => {
     let latest = BIBLICAL_TIMELINE[0]
@@ -69,6 +70,8 @@ export function TimelineProvider({ children }) {
     setSelectedEntity,
     isPlaying,
     setIsPlaying,
+    mapVisible,
+    setMapVisible,
     formatYear,
     entityPaths: ENTITY_PATHS,
   }

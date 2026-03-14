@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useTimeline } from '../../context/TimelineContext'
@@ -7,16 +7,28 @@ import { latLongToVector3 } from '../../utils/coordinates'
 const CLOSE_DISTANCE = 2.55
 const WIDE_DISTANCE = 5.5
 const LERP_SPEED = 0.025
+const SETTLE_DELAY_MS = 2500
 const DEFAULT_POSITION = new THREE.Vector3(0, 1.5, WIDE_DISTANCE)
 const ORIGIN = new THREE.Vector3(0, 0, 0)
 
 export function CameraController({ controlsRef }) {
   const { camera } = useThree()
-  const { currentEvent } = useTimeline()
+  const { currentEvent, setMapVisible } = useTimeline()
 
   const targetCamPos = useRef(DEFAULT_POSITION.clone())
   const targetLookAt = useRef(ORIGIN.clone())
   const prevEventRef = useRef(null)
+  const settleTimer = useRef(null)
+
+  const scheduleMapReveal = useCallback((hasLoc) => {
+    if (settleTimer.current) clearTimeout(settleTimer.current)
+    setMapVisible(false)
+    if (hasLoc) {
+      settleTimer.current = setTimeout(() => {
+        setMapVisible(true)
+      }, SETTLE_DELAY_MS)
+    }
+  }, [setMapVisible])
 
   useEffect(() => {
     if (currentEvent === prevEventRef.current) return
@@ -33,15 +45,20 @@ export function CameraController({ controlsRef }) {
       targetCamPos.current.y += 0.2
 
       targetLookAt.current.copy(surfacePoint)
+      scheduleMapReveal(true)
     } else {
       targetCamPos.current.copy(DEFAULT_POSITION)
       targetLookAt.current.copy(ORIGIN)
+      scheduleMapReveal(false)
     }
-  }, [currentEvent])
+
+    return () => {
+      if (settleTimer.current) clearTimeout(settleTimer.current)
+    }
+  }, [currentEvent, scheduleMapReveal])
 
   useFrame(() => {
     if (!controlsRef?.current) return
-
     camera.position.lerp(targetCamPos.current, LERP_SPEED)
     controlsRef.current.target.lerp(targetLookAt.current, LERP_SPEED)
     controlsRef.current.update()
