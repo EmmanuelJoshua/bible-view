@@ -2,11 +2,11 @@ import React from 'react'
 import { PropheticHUD } from './PropheticHUD'
 import { ChronosSlider } from './ChronosSlider'
 import { EntityPanel } from './EntityPanel'
-import { Target, Radio, Shield } from 'lucide-react'
+import { Target, Radio, Shield, Globe, Map } from 'lucide-react'
 import { useTimeline } from '../../context/TimelineContext'
 
 export function TacticalOverlay() {
-  const { currentEvent, currentYear, formatYear, eraLabel, eraColor } = useTimeline()
+  const { currentEvent, currentYear, formatYear, eraLabel, eraColor, mapVisible, setMapVisible } = useTimeline()
 
   return (
     <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
@@ -24,30 +24,57 @@ export function TacticalOverlay() {
         </div>
       </div>
 
-      {/* Top Right - Satellite Lock Window */}
-      {currentEvent && currentEvent.location && (
-        <div className="absolute top-14 right-5 border border-tactical-cyan/30 bg-tactical-bg/85 backdrop-blur-sm corner-decoration">
+      {/* Top Right - View Mode Toggle + Satellite Lock */}
+      <div className="absolute top-14 right-5 space-y-2">
+        {/* View Mode Indicator & Toggle */}
+        <div className="bg-tactical-bg/85 border border-tactical-cyan/20 backdrop-blur-sm corner-decoration pointer-events-auto">
           <div className="bg-tactical-cyan/10 px-3 py-1 text-[10px] text-tactical-cyan uppercase flex items-center gap-2 font-mono border-b border-tactical-cyan/20">
-            <Target size={11} className="tactical-pulse" />
-            Sat-Lock: Active
-            <span className="blink text-tactical-green ml-2">●</span>
+            {mapVisible ? <Map size={11} /> : <Globe size={11} />}
+            View Mode
           </div>
-          <div className="p-3 font-mono text-tactical-cyan space-y-1">
-            <div className="flex justify-between gap-6">
-              <span className="text-[9px] text-gray-500 uppercase">Lat</span>
-              <span className="text-xs font-bold tracking-widest">{currentEvent.location.lat.toFixed(4)}°</span>
-            </div>
-            <div className="flex justify-between gap-6">
-              <span className="text-[9px] text-gray-500 uppercase">Lng</span>
-              <span className="text-xs font-bold tracking-widest">{currentEvent.location.lng.toFixed(4)}°</span>
-            </div>
-            <div className="flex justify-between gap-6 border-t border-tactical-cyan/15 pt-1 mt-1">
-              <span className="text-[9px] text-gray-500 uppercase">Time</span>
-              <span className="text-xs font-bold tracking-widest">{formatYear(currentYear)}</span>
-            </div>
+          <div className="p-2 flex items-center gap-2">
+            <button
+              onClick={() => setMapVisible(false)}
+              className={`view-mode-btn ${!mapVisible ? 'view-mode-btn--active' : ''}`}
+            >
+              <Globe size={10} />
+              Globe
+            </button>
+            <button
+              onClick={() => setMapVisible(true)}
+              className={`view-mode-btn ${mapVisible ? 'view-mode-btn--active' : ''}`}
+            >
+              <Map size={10} />
+              Map
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Satellite Lock Window */}
+        {currentEvent && currentEvent.location && (
+          <div className="border border-tactical-cyan/30 bg-tactical-bg/85 backdrop-blur-sm corner-decoration">
+            <div className="bg-tactical-cyan/10 px-3 py-1 text-[10px] text-tactical-cyan uppercase flex items-center gap-2 font-mono border-b border-tactical-cyan/20">
+              <Target size={11} className="tactical-pulse" />
+              Sat-Lock: Active
+              <span className="blink text-tactical-green ml-2">●</span>
+            </div>
+            <div className="p-3 font-mono text-tactical-cyan space-y-1">
+              <div className="flex justify-between gap-6">
+                <span className="text-[9px] text-gray-500 uppercase">Lat</span>
+                <span className="text-xs font-bold tracking-widest">{currentEvent.location.lat.toFixed(4)}°</span>
+              </div>
+              <div className="flex justify-between gap-6">
+                <span className="text-[9px] text-gray-500 uppercase">Lng</span>
+                <span className="text-xs font-bold tracking-widest">{currentEvent.location.lng.toFixed(4)}°</span>
+              </div>
+              <div className="flex justify-between gap-6 border-t border-tactical-cyan/15 pt-1 mt-1">
+                <span className="text-[9px] text-gray-500 uppercase">Time</span>
+                <span className="text-xs font-bold tracking-widest">{formatYear(currentYear)}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Top Left - Era Indicator */}
       <div className="absolute top-14 left-5">

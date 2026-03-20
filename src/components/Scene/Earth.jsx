@@ -2,7 +2,7 @@ import React from 'react'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
-import mapImg from '../../assets/earth_map.jpg'
+import mapImg from '../../assets/earth_map_16k.jpg'
 import specImg from '../../assets/earth_specular.jpg'
 
 export function Earth() {

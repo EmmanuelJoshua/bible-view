@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useMemo } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Tooltip, useMap } from 'react-leaflet'
+import React, { useEffect, useRef, useMemo, useState } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Tooltip, Polyline, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import { useTimeline } from '../../context/TimelineContext'
 import { ANCIENT_PLACES, PLACE_TYPE_STYLES } from '../../data/ancientPlaces'
+import { ENTITY_PATHS } from '../../data/entities'
 
 const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
 const DARK_TILES_ATTR = '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
@@ -28,6 +29,60 @@ function MapController({ location }) {
   }, [location, map])
 
   return null
+}
+
+/* ─── Zoom Level Readout ─── */
+function ZoomReadout() {
+  const map = useMap()
+  const [zoom, setZoom] = useState(map.getZoom())
+
+  useMapEvents({
+    zoom: () => setZoom(map.getZoom()),
+    zoomend: () => setZoom(map.getZoom()),
+  })
+
+  return (
+    <div className="zoom-readout">
+      <span className="zoom-readout__label">ZOOM</span>
+      <span className="zoom-readout__value">{zoom.toFixed(1)}</span>
+    </div>
+  )
+}
+
+/* ─── Entity Trail Polylines on 2D Map ─── */
+function EntityTrailPolylines() {
+  const { currentYear } = useTimeline()
+
+  const trails = useMemo(() => {
+    return ENTITY_PATHS.map(entity => {
+      const activePoints = entity.waypoints.filter(wp => wp.year <= currentYear)
+      if (activePoints.length < 2) return null
+
+      const positions = activePoints.map(wp => [wp.lat, wp.lng])
+
+      return {
+        key: entity.id,
+        positions,
+        color: entity.color,
+        name: entity.name,
+      }
+    }).filter(Boolean)
+  }, [currentYear])
+
+  return trails.map(trail => (
+    <Polyline
+      key={trail.key}
+      positions={trail.positions}
+      pathOptions={{
+        color: trail.color,
+        weight: 2,
+        opacity: 0.55,
+        dashArray: '6, 4',
+        lineCap: 'round',
+        lineJoin: 'round',
+      }}
+    />
+  ))
 }
 
 function AncientPlaceLabels() {
@@ -132,10 +187,15 @@ export function MapOverlay() {
       className="absolute inset-0 z-[5]"
       style={{
         opacity: mapVisible ? 1 : 0,
+        filter: mapVisible ? 'blur(0px)' : 'blur(12px)',
+        transform: mapVisible ? 'scale(1)' : 'scale(1.08)',
         pointerEvents: mapVisible ? 'auto' : 'none',
-        transition: 'opacity 0.8s ease-in-out',
+        transition: 'opacity 1s ease-in-out, filter 1.2s ease-out, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
     >
+      {/* Vignette overlay */}
+      <div className="map-vignette" />
+
       <MapContainer
         center={[location.lat, location.lng]}
         zoom={INITIAL_ZOOM}
@@ -156,6 +216,8 @@ export function MapOverlay() {
         <AncientPlaceLabels />
         <EventMarker location={location} eventName={currentEvent.name} />
         <EntityMarkers />
+        <EntityTrailPolylines />
+        <ZoomReadout />
       </MapContainer>
     </div>
   )

@@ -270,3 +270,79 @@
     opacity: 0.6;
   }
 }
+
+/* ─── Map Vignette Overlay ─── */
+.map-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(5, 11, 20, 0.4) 70%,
+    rgba(5, 11, 20, 0.85) 90%,
+    rgba(5, 11, 20, 1) 100%
+  );
+}
+
+/* ─── Zoom Level Readout ─── */
+.zoom-readout {
+  position: fixed;
+  bottom: 50px;
+  left: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(5, 11, 20, 0.85);
+  border: 1px solid rgba(0, 243, 255, 0.25);
+  padding: 4px 10px;
+  backdrop-filter: blur(4px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.zoom-readout__label {
+  font-size: 9px;
+  color: #6b7280;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.zoom-readout__value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #00f3ff;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 6px rgba(0, 243, 255, 0.5);
+}
+
+/* ─── View Mode Toggle Buttons ─── */
+.view-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  background: transparent;
+  border: 1px solid rgba(107, 114, 128, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.view-mode-btn:hover {
+  color: #00f3ff;
+  border-color: rgba(0, 243, 255, 0.35);
+  background: rgba(0, 243, 255, 0.06);
+}
+
+.view-mode-btn--active {
+  color: #00f3ff;
+  border-color: rgba(0, 243, 255, 0.4);
+  background: rgba(0, 243, 255, 0.12);
+  text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
+}
