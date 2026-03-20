@@ -10,15 +10,16 @@ export function EntityPanel() {
     entity.waypoints.filter(wp => wp.year <= currentYear).pop()
 
   return (
-    <div className="pointer-events-auto" style={{ position: 'absolute', right: '1.25rem', top: '200px' }}>
+    <div className="pointer-events-auto absolute right-5 top-[280px]">
       <motion.div 
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
-        className="w-60 bg-tactical-bg/85 border border-tactical-cyan/25 backdrop-blur-sm corner-decoration"
+        className="w-60 bg-tactical-bg/85 border border-tactical-cyan/25 backdrop-blur-sm corner-decoration flex flex-col"
+        style={{ maxHeight: 'calc(100vh - 340px)' }}
       >
         {/* Header */}
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-tactical-cyan/20 bg-tactical-cyan/5">
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-tactical-cyan/20 bg-tactical-cyan/5 shrink-0">
           <Route size={12} className="text-tactical-cyan" />
           <span className="text-[10px] text-tactical-cyan tracking-[0.2em] uppercase">Entity Tracker</span>
           <span className="text-[9px] text-gray-500 ml-auto">{activeEntities.length} Active</span>

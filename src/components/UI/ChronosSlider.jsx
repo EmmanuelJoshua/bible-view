@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useCallback, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTimeline } from '../../context/TimelineContext'
-import { Play, Pause, SkipBack, SkipForward, Clock, Minus, Plus } from 'lucide-react'
+import { Play, Pause, SkipBack, SkipForward, Clock } from 'lucide-react'
 
 const SPEED_PRESETS = [
   { label: '0.5x', step: 3, interval: 120 },
@@ -117,8 +117,8 @@ export function ChronosSlider() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
-      className="pointer-events-auto"
-      style={{ position: 'absolute', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)', width: '680px', maxWidth: '90vw' }}
+      className="pointer-events-auto absolute bottom-6 left-1/2 -translate-x-1/2 z-50"
+      style={{ width: '680px', maxWidth: '90vw' }}
     >
       <div className="bg-tactical-bg/90 border border-tactical-cyan/30 backdrop-blur-md corner-decoration">
         {/* Header */}
@@ -128,7 +128,6 @@ export function ChronosSlider() {
             <span className="text-[9px] text-tactical-cyan uppercase tracking-[0.2em]">Chronos Engine</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[9px] text-gray-500 font-mono">{SPEED_PRESETS[speedIdx].label}</span>
             <span className="text-[9px] text-gray-500 font-mono">{progressPct.toFixed(1)}%</span>
           </div>
         </div>
@@ -287,9 +286,6 @@ export function ChronosSlider() {
 
           {/* Playback controls */}
           <div className="flex items-center justify-center gap-1">
-            <button onClick={decreaseSpeed} className="p-1.5 text-gray-500 hover:text-tactical-cyan transition-colors" title="Decrease speed">
-              <Minus size={11} />
-            </button>
             <button onClick={skipPrev} className="p-1.5 text-gray-500 hover:text-tactical-cyan transition-colors">
               <SkipBack size={12} />
             </button>
@@ -301,9 +297,6 @@ export function ChronosSlider() {
             </button>
             <button onClick={skipNext} className="p-1.5 text-gray-500 hover:text-tactical-cyan transition-colors">
               <SkipForward size={12} />
-            </button>
-            <button onClick={increaseSpeed} className="p-1.5 text-gray-500 hover:text-tactical-cyan transition-colors" title="Increase speed">
-              <Plus size={11} />
             </button>
           </div>
         </div>
