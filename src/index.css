@@ -346,3 +346,8 @@
   background: rgba(0, 243, 255, 0.12);
   text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
 }
+
+/* ─── Tactical Satellite Tile Theme ─── */
+.tactical-satellite-tiles {
+  filter: grayscale(1) brightness(0.6) sepia(1) hue-rotate(180deg) saturate(1.8) contrast(1.3);
+}

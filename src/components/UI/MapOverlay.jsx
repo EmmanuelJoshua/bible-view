@@ -5,8 +5,8 @@ import { useTimeline } from '../../context/TimelineContext'
 import { ANCIENT_PLACES, PLACE_TYPE_STYLES } from '../../data/ancientPlaces'
 import { ENTITY_PATHS } from '../../data/entities'
 
-const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
-const DARK_TILES_ATTR = '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+const DARK_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+const DARK_TILES_ATTR = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 const INITIAL_ZOOM = 12
 const MAX_ZOOM = 19
 const FLY_DURATION = 1.5
@@ -208,6 +208,7 @@ export function MapOverlay() {
         style={{ width: '100%', height: '100%', background: '#050b14' }}
       >
         <TileLayer
+          className="tactical-satellite-tiles"
           url={DARK_TILES}
           attribution={DARK_TILES_ATTR}
           maxZoom={MAX_ZOOM}
